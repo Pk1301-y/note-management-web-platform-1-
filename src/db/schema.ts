@@ -5,7 +5,6 @@ import {
   varchar,
   boolean,
   timestamp,
-  mysqlEnum,
 } from "drizzle-orm/mysql-core";
 import { relations } from "drizzle-orm";
 
@@ -37,7 +36,7 @@ export const categories = mysqlTable("categories", {
 export const notes = mysqlTable("notes", {
   id: int("id").primaryKey().autoincrement(),
   title: varchar("title", { length: 500 }).notNull(),
-  content: text("content").notNull().default(""),
+  content: text("content"),
   userId: int("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
@@ -45,7 +44,7 @@ export const notes = mysqlTable("notes", {
     onDelete: "set null",
   }),
   isPinned: boolean("is_pinned").default(false).notNull(),
-  tags: text("tags").notNull().default(""),
+  tags: varchar("tags", { length: 1000 }).default(""),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
